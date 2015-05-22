@@ -14,6 +14,7 @@ public:
 
 private:
     bool isHit;
+
 };
 
 class myBullet : public bullet
