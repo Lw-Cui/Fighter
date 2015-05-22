@@ -3,6 +3,7 @@
 
 #include "visualobject.h"
 
+
 class bullet : public visualObject
 {
 public:
