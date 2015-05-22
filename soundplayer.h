@@ -3,7 +3,6 @@
 
 #include "SFML/Audio.hpp"
 #include <map>
-#include <string>
 
 class soundCache
 {
@@ -16,7 +15,6 @@ public:
 private:
     std::map<std::string, sf::SoundBuffer*> _soundBuffer;
 };
-
 
 class soundplayer
 {
