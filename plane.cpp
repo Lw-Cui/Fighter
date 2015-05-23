@@ -3,7 +3,8 @@
 
 void plane::deathAnimate()
 {
-   if (_animation > 1 && _time.getElapsedTime().asSeconds() > 0.075) {
+   if (_animation > 1
+           && _time.getElapsedTime().asSeconds() > 0.075) {
        load(--_animation);
        _time.restart();
    }
@@ -16,7 +17,8 @@ void plane::dead()
 
 void plane::setRandomPosition()
 {
-    _sprite.setPosition(getSize().x / 2 + rand() % (game::WIDTH - getSize().x),
+    _sprite.setPosition(getSize().x / 2 +
+                        rand() % (game::WIDTH - getSize().x),
                            50 - (int)getSize().y);
 }
 

@@ -6,10 +6,20 @@
 #include "game.h"
 
 
-objectManager::objectManager() : _enemySum(3)
+objectManager::objectManager()
 {
-    assert(_image.loadFromFile("resources/image/background.png"));
+    _enemySum = 3;
+    _score = 0;
+    _move = 1600 - game::LENGTH;
+
+    assert(_image.loadFromFile("resources/image/backGround.png"));
     _background.setTexture(_image);
+
+    _scoreBoard.setFont(game::_font);
+    _scoreBoard.setPosition(10, 10);
+    _scoreBoard.setColor(sf::Color::Red);
+    _scoreBoard.setStyle(sf::Text::Bold);
+    _scoreBoard.setCharacterSize(25);
 
     _hero = new hero;
 }
@@ -31,16 +41,25 @@ void objectManager::drawAll(sf::RenderWindow &window)
     for (std::list<bullet *>::iterator ite = _bullet.begin();
          ite != _bullet.end(); ite++)
         (*ite)->draw(window);
+
+    window.draw(_scoreBoard);
 }
 
 void objectManager::updateAll()
 {
-    _hero->update();
+    if (_backMoveTime.getElapsedTime().asSeconds() > 0.01) {
+        _background.setTextureRect(sf::IntRect(0, _move, game::WIDTH, game::LENGTH));
+        if ((_move -= 1) < 0)
+            _move = 1600 - game::LENGTH;
+        _backMoveTime.restart();
+    }
 
+    _hero->update();
     updateBullet();
     updateEnemy();
     fire();
     collisionDetection();
+    updateScore();
 }
 
 void objectManager::updateEnemy()
@@ -52,12 +71,16 @@ void objectManager::updateEnemy()
         if (!p->isExisting()) {
 
             if( p->getPosition().y - p->getSize().y / 2 < game::LENGTH) {
-                if (dynamic_cast<boss *>(p))
-                    game::soundPlay("resources/sound/enemy2_down.ogg");
-                else if (dynamic_cast<batman *>(p))
-                    game::soundPlay("resources/sound/enemy3_down.ogg");
-                else
-                    game::soundPlay("resources/sound/enemy1_down.ogg");
+                if (dynamic_cast<boss *>(p)) {
+                    game::soundPlay("resources/sound/enemy2_down.ogg", 75);
+                    _score += 10000;
+                } else if (dynamic_cast<batman *>(p)) {
+                    game::soundPlay("resources/sound/enemy3_down.ogg", 80);
+                    _score += 5000;
+                } else {
+                    game::soundPlay("resources/sound/enemy1_down.ogg", 90);
+                    _score += 1000;
+                }
             }
 
             delete p;
@@ -77,6 +100,13 @@ void objectManager::updateEnemy()
         else
             _enemy.push_back(new boss);
     }
+}
+
+void objectManager::updateScore()
+{
+    char score[100];
+    sprintf(score, "SCORE:%6d", _score);
+    _scoreBoard.setString(std::string(score));
 }
 
 

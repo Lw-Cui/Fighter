@@ -22,7 +22,7 @@ public:
     soundplayer();
     ~soundplayer();
 
-    void playSound(const std::string &fileName);
+    void playSound(const std::string &fileName, int volume);
 
 private:
     const static int SOUND_SUM = 10;

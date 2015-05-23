@@ -19,6 +19,7 @@ public:
 private:
     void updateBullet();
     void updateEnemy();
+    void updateScore();
     void collisionDetection();
     void fire();
 
@@ -31,6 +32,12 @@ private:
 
     int _enemySum;
     sf::Clock _myTime, _enemyTime;
+
+    sf::Clock _backMoveTime;
+    int _move;
+
+    int _score;
+    sf::Text _scoreBoard;
 };
 
 #endif // OBJECTMANAGER_H
