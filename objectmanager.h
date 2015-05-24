@@ -36,8 +36,8 @@ private:
     sf::Clock _backMoveTime;
     int _move;
 
-    int _score;
     sf::Text _scoreBoard;
+    int _score;
 };
 
 #endif // OBJECTMANAGER_H

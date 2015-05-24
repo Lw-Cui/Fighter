@@ -8,17 +8,13 @@ class plane : public visualObject
 public:
     virtual ~plane();
 
-    virtual void update() = 0;
     void decreaseEnergy();
-    bool isExisting();
-    void deathAnimate();
     void dead();
 
 protected:
     void setRandomPosition();
     int _energy;
-    int _animation;
-    sf::Clock _time;
+
 };
 
 
@@ -26,15 +22,38 @@ class hero : public plane
 {
 public:
     hero();
+    void init();
     void update();
+    bool isExisting();
+    bool reborn();
+    void setCenter();
 
 private:
     const static int ENERGY = 3;
     const static int ANIMATION = 4;
     const static float VELOCITY = 0.25;
+
+    sf::Clock _rebornTime;
+    int _rebornAnimation;
 };
 
-class boss : public plane
+
+
+class enemy : public plane
+{
+public:
+    virtual ~enemy();
+    void deathAnimate();
+    bool isExisting();
+
+protected:
+    int _deathAnimation;
+
+private:
+    sf::Clock _deathTime;
+};
+
+class boss : public enemy
 {
 public:
     boss();
@@ -47,7 +66,7 @@ private:
 };
 
 
-class batman : public plane
+class batman : public enemy
 {
 public:
     batman();
@@ -59,7 +78,7 @@ private:
     const static float VELOCITY = 0.1;
 };
 
-class bat : public plane
+class bat : public enemy
 {
 public:
     bat();

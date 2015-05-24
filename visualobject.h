@@ -11,6 +11,7 @@ public:
     virtual ~visualObject();
 
     virtual void update() = 0;
+    virtual bool isExisting() = 0;
     sf::FloatRect getBounds();
     const sf::Vector2f getPosition();
     const sf::Vector2u getSize();

@@ -178,7 +178,7 @@ void objectManager::collisionDetection()
         }
 
         if (bulletBound.intersects(_hero->getBounds())) {
-            _hero->decreaseEnergy();
+            _hero->dead();
             bulletP->setHit();
         }
     }
