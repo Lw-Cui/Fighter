@@ -3,12 +3,12 @@
 #include "game.h"
 
 
-void plane::dead()
+void enemy::dead()
 {
     _energy = 0;
 }
 
-void plane::setRandomPosition()
+void enemy::setRandomPosition()
 {
     _sprite.setPosition(getSize().x / 2 +
                         rand() % (game::WIDTH - getSize().x),
@@ -88,8 +88,8 @@ hero::hero()
 
 void hero::init()
 {
-    _energy = ENERGY;
     _rebornAnimation = ANIMATION;
+    _isdead = false;
     _prototype = "*-hero";
     load();
 }
@@ -107,15 +107,14 @@ void hero::update()
 
     _sprite.move(offsetX, 0);
 
-    if (_energy <= 0  && reborn())
+    if (_isdead && reborn())
         init();
 }
 
 bool hero::isExisting()
 {
-    return _energy;
+    return _isdead;
 }
-
 
 bool hero::reborn()
 {
@@ -124,7 +123,7 @@ bool hero::reborn()
        load(--_rebornAnimation);
        _rebornTime.restart();
    } else if (_rebornAnimation > - ANIMATION + 2
-       && _rebornTime.getElapsedTime().asSeconds() > 0.13) {
+       && _rebornTime.getElapsedTime().asSeconds() > 0.2) {
 
        if (_rebornAnimation == 1)
            setCenter();
@@ -146,9 +145,13 @@ bool hero::reborn()
 void hero::setCenter()
 {
     _sprite.setPosition(game::WIDTH / 2,
-            game::LENGTH - getSize().y / 2);
+                        game::LENGTH - getSize().y / 2);
 }
 
+void hero::dead()
+{
+    _isdead = true;
+}
 
 void enemy::deathAnimate()
 {
@@ -159,11 +162,8 @@ void enemy::deathAnimate()
    }
 }
 
-plane::~plane()
-{
-}
 
-void plane::decreaseEnergy()
+void enemy::decreaseEnergy()
 {
     _energy--;
 }

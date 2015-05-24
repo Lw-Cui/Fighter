@@ -19,15 +19,19 @@ public:
 private:
     void updateBullet();
     void updateEnemy();
-    void updateScore();
+    void updateText();
     void collisionDetection();
     void fire();
+    void setTextType(sf::Text &text);
+
 
     sf::Texture _image;
     sf::Sprite _background;
 
     hero *_hero;
-    std::list<plane *> _enemy;
+    int _heroLife;
+
+    std::list<enemy *> _enemy;
     std::list<bullet *> _bullet;
 
     int _enemySum;
@@ -37,6 +41,7 @@ private:
     int _move;
 
     sf::Text _scoreBoard;
+    sf::Text _lifeBoard;
     int _score;
 };
 

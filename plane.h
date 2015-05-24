@@ -3,22 +3,9 @@
 
 #include "visualobject.h"
 
-class plane : public visualObject
-{
-public:
-    virtual ~plane();
-
-    void decreaseEnergy();
-    void dead();
-
-protected:
-    void setRandomPosition();
-    int _energy;
-
-};
 
 
-class hero : public plane
+class hero : public visualObject
 {
 public:
     hero();
@@ -27,27 +14,32 @@ public:
     bool isExisting();
     bool reborn();
     void setCenter();
+    void dead();
 
 private:
-    const static int ENERGY = 3;
     const static int ANIMATION = 4;
     const static float VELOCITY = 0.25;
 
     sf::Clock _rebornTime;
     int _rebornAnimation;
+    bool _isdead;
 };
 
 
 
-class enemy : public plane
+class enemy : public visualObject
 {
 public:
     virtual ~enemy();
     void deathAnimate();
     bool isExisting();
+    void dead();
+    void decreaseEnergy();
 
 protected:
+    void setRandomPosition();
     int _deathAnimation;
+    int _energy;
 
 private:
     sf::Clock _deathTime;
@@ -60,7 +52,7 @@ public:
     void update();
 
 private:
-    static const int ENERGY = 7;
+    static const int ENERGY = 4;
     static const int ANIMATION = 6;
     static const float VELOCITY = 0.05;
 };
