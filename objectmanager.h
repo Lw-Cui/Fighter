@@ -29,7 +29,6 @@ private:
     sf::Sprite _background;
 
     hero *_hero;
-    int _heroLife;
 
     std::list<enemy *> _enemy;
     std::list<bullet *> _bullet;
@@ -41,8 +40,11 @@ private:
     int _move;
 
     sf::Text _scoreBoard;
-    sf::Text _lifeBoard;
     int _score;
+
+    sf::Text _lifeBoard;
+    sf::Text _levelBoard;
+    int _level;
 };
 
 #endif // OBJECTMANAGER_H

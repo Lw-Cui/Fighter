@@ -1,7 +1,7 @@
 #include "bullet.h"
 #include "game.h"
 
-enemybullet::enemybullet(float x, float y)
+enemybullet::enemybullet(double x, double y)
 {
     _prototype = "blueBullet";
     load();
@@ -19,7 +19,7 @@ void enemybullet::update()
 }
 
 
-myBullet::myBullet(float x, float y)
+myBullet::myBullet(double x, double y)
 {
     _prototype = "redBullet";
     load();

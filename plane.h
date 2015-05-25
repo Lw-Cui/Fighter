@@ -15,14 +15,16 @@ public:
     bool reborn();
     void setCenter();
     void dead();
+    int getAllLife();
 
 private:
     const static int ANIMATION = 4;
-    const static float VELOCITY = 0.25;
+    const static double VELOCITY = 0.25;
 
     sf::Clock _rebornTime;
     int _rebornAnimation;
     bool _isdead;
+    int _allLife;
 };
 
 
@@ -40,6 +42,7 @@ protected:
     void setRandomPosition();
     int _deathAnimation;
     int _energy;
+    double _velocity;
 
 private:
     sf::Clock _deathTime;
@@ -54,7 +57,6 @@ public:
 private:
     static const int ENERGY = 4;
     static const int ANIMATION = 6;
-    static const float VELOCITY = 0.05;
 };
 
 
@@ -67,7 +69,6 @@ public:
 private:
     const static int ENERGY = 2;
     const static int ANIMATION = 4;
-    const static float VELOCITY = 0.1;
 };
 
 class bat : public enemy
@@ -79,7 +80,6 @@ public:
 private:
     const static int ENERGY = 1;
     const static int ANIMATION = 4;
-    const static float VELOCITY = 0.3;
 };
 
 #endif // PLANE_H

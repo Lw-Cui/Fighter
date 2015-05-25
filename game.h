@@ -5,6 +5,7 @@
 #include "objectmanager.h"
 #include "extract.h"
 #include "soundplayer.h"
+#include "difficultcontrol.h"
 
 class game
 {
@@ -19,6 +20,8 @@ public:
     static void setFont();
 
     static sf::Font _font;
+    static difficultControl _controlPanel;
+
 private:
     static extract _extract;
     static soundplayer _audioPlay;

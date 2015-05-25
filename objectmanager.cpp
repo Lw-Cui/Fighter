@@ -8,10 +8,9 @@
 
 objectManager::objectManager()
 {
-    _enemySum = 3;
     _score = 0;
     _move = 1600 - game::LENGTH;
-    _heroLife = 3;
+    _level = 1;
 
     assert(_image.loadFromFile("resources/image/backGround.png"));
     _background.setTexture(_image);
@@ -65,6 +64,11 @@ void objectManager::updateAll()
 
 void objectManager::updateEnemy()
 {
+    if (_score / 15000 > _level) {
+        _level = _score / 15000;
+        game::_controlPanel.upLevel();
+    }
+
     for (std::list<enemy *>::iterator ite = _enemy.begin();
          ite != _enemy.end();) {
         enemy *p = *ite;
@@ -92,7 +96,8 @@ void objectManager::updateEnemy()
         }
     }
 
-    for (int i = _enemy.size(); i < _enemySum; i++) {
+    for (int i = _enemy.size();
+         i < game::_controlPanel.getEnemySum(); i++) {
         int random = rand();
         if (random % 2)
             _enemy.push_back(new bat);
@@ -110,7 +115,8 @@ void objectManager::updateText()
     _scoreBoard.setString(std::string(score));
 
     char life[100];
-    sprintf(life, "LIFE * %2d", _heroLife);
+    //for (int i = 0; i < _heroLife; i++)
+    sprintf(life, "LIFE: %2d", _hero->getAllLife());
     _lifeBoard.setString(std::string(life));
 }
 
@@ -193,15 +199,14 @@ void objectManager::collisionDetection()
 
         if (bulletBound.intersects(_hero->getBounds())) {
             _hero->dead();
-            _heroLife--;
             bulletP->setHit();
         }
     }
 
-    for (std::list<enemy *>::iterator bulletIte = _enemy.begin();
-         bulletIte != _enemy.end(); bulletIte++) {
+    for (std::list<enemy *>::iterator enemyIte = _enemy.begin();
+         enemyIte != _enemy.end(); enemyIte++) {
 
-        enemy *enemyP = *bulletIte;
+        enemy *enemyP = *enemyIte;
         if (_hero->getBounds().intersects(enemyP->getBounds())) {
             _hero->dead();
             enemyP->dead();

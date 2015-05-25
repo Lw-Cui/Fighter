@@ -20,7 +20,7 @@ private:
 class myBullet : public bullet
 {
 public:
-    myBullet(float x, float y);
+    myBullet(double x, double y);
     ~myBullet();
 
     void update();
@@ -29,7 +29,7 @@ public:
 class enemybullet : public bullet
 {
 public:
-    enemybullet(float x, float y);
+    enemybullet(double x, double y);
     ~enemybullet();
 
     void update();

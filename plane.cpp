@@ -31,6 +31,7 @@ boss::boss()
     _energy = ENERGY;
     _deathAnimation = ANIMATION;
     _prototype = "*-boss";
+    _velocity = game::_controlPanel.getBossVelocity();
     load();
     setRandomPosition();
 }
@@ -38,7 +39,7 @@ boss::boss()
 
 void boss::update()
 {
-    _sprite.move(0, VELOCITY);
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -49,6 +50,7 @@ bat::bat()
     _prototype = "*-bat";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
+    _velocity = game::_controlPanel.getBatVelocity();
     load();
     setRandomPosition();
 }
@@ -56,7 +58,7 @@ bat::bat()
 
 void bat::update()
 {
-    _sprite.move(0, VELOCITY);
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -68,13 +70,14 @@ batman::batman()
     _prototype = "*-batman";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
+    _velocity = game::_controlPanel.getBatmanVelocity();
     load();
     setRandomPosition();
 }
 
 void batman::update()
 {
-    _sprite.move(0, VELOCITY);
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -82,6 +85,7 @@ void batman::update()
 
 hero::hero()
 {
+    _allLife = 3;
     init();
     setCenter();
 }
@@ -96,7 +100,7 @@ void hero::init()
 
 void hero::update()
 {
-    float offsetX = 0;
+    double offsetX = 0;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
             && getPosition().x > getSize().x / 2)
@@ -119,7 +123,7 @@ bool hero::isExisting()
 bool hero::reborn()
 {
    if (_rebornAnimation > 1
-           && _rebornTime.getElapsedTime().asSeconds() > 0.085) {
+           && _rebornTime.getElapsedTime().asSeconds() > 0.095) {
        load(--_rebornAnimation);
        _rebornTime.restart();
    } else if (_rebornAnimation > - ANIMATION + 2
@@ -150,7 +154,14 @@ void hero::setCenter()
 
 void hero::dead()
 {
+    if (!_isdead)
+        _allLife--;
     _isdead = true;
+}
+
+int hero::getAllLife()
+{
+    return _allLife;
 }
 
 void enemy::deathAnimate()

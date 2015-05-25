@@ -47,3 +47,4 @@ sf::RenderWindow game::_window;
 soundplayer game::_audioPlay;
 sf::Font game::_font;
 objectManager game::_object;
+difficultControl game::_controlPanel;
