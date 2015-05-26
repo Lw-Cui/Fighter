@@ -25,7 +25,9 @@ objectManager::objectManager()
 
 objectManager::~objectManager()
 {
-
+    clearEnemy();
+    clearBullet();
+    delete _hero;
 }
 
 void objectManager::drawAll(sf::RenderWindow &window)
@@ -62,6 +64,19 @@ void objectManager::updateAll()
     updateText();
 }
 
+bool objectManager::isContinue()
+{
+    return _hero->getAllLife() > 0;
+}
+
+void objectManager::reStart()
+{
+    _hero->reStart();
+    _hero->setCenter();
+    clearEnemy();
+    clearBullet();
+}
+
 void objectManager::updateEnemy()
 {
     if (_score / 25000 > _level) {
@@ -77,13 +92,13 @@ void objectManager::updateEnemy()
 
             if( p->getPosition().y - p->getSize().y / 2 < game::LENGTH) {
                 if (dynamic_cast<boss *>(p)) {
-                    game::soundPlay("resources/sound/enemy2_down.ogg", 75);
+                    game::_audioPlay.playSound("resources/sound/enemy2_down.ogg", 75);
                     _score += 7000;
                 } else if (dynamic_cast<batman *>(p)) {
-                    game::soundPlay("resources/sound/enemy3_down.ogg", 80);
+                    game::_audioPlay.playSound("resources/sound/enemy3_down.ogg", 80);
                     _score += 3000;
                 } else {
-                    game::soundPlay("resources/sound/enemy1_down.ogg", 90);
+                    game::_audioPlay.playSound("resources/sound/enemy1_down.ogg", 90);
                     _score += 1000;
                 }
             }
@@ -149,31 +164,56 @@ void objectManager::fire()
 {
     if (_myFireTime.getElapsedTime().asSeconds()> 0.2
             && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        game::soundPlay("resources/sound/bullet.ogg");
+        game::_audioPlay.playSound("resources/sound/bullet.ogg");
         bullet *p = new myBullet(_hero->getPosition().x,
                         _hero->getPosition().y - _hero->getSize().y / 2 - 15);
         _bullet.push_back(p);
         _myFireTime.restart();
     }
 
-
     if (!_enemy.empty()
-            && _enemyFireTime.getElapsedTime().asSeconds() > 2) {
+            && _enemyFireTime.getElapsedTime().asSeconds() > 1) {
         std::list<enemy *>::iterator ite = _enemy.begin();
         int index = rand() % (game::_controlPanel.getEnemySum() - 1);
         while (index--)
             ite++;
-        visualObject *front = *ite;
-        if (!dynamic_cast<bat *>(front)) {
-            game::soundPlay("resources/sound/bullet.ogg");
-            bullet *p = new enemybullet(front->getPosition().x,
-                    front->getPosition().y +
-                    front->getSize().y / 2 + 15);
-            _bullet.push_back(p);
-            _enemyFireTime.restart();
+        enemy *enemyF = *ite;
+        bossFire(dynamic_cast<boss *>(enemyF));
+        batmanFire(dynamic_cast<batman *>(enemyF));
+        _enemyFireTime.restart();
         }
-    }
+}
 
+
+void objectManager::bossFire(boss *Boss)
+{
+    if (!Boss)
+        return;
+    game::_audioPlay.playSound("resources/sound/bullet.ogg");
+    _bullet.push_back(new enemybullet(Boss->getPosition().x,
+        Boss->getPosition().y + Boss->getSize().y / 2 + 15,
+                                60));
+    _bullet.push_back(new enemybullet(Boss->getPosition().x,
+        Boss->getPosition().y + Boss->getSize().y / 2 + 15,
+                                30));
+    _bullet.push_back(new enemybullet(Boss->getPosition().x,
+        Boss->getPosition().y + Boss->getSize().y / 2 + 15,
+                                0));
+    _bullet.push_back(new enemybullet(Boss->getPosition().x,
+        Boss->getPosition().y + Boss->getSize().y / 2 + 15,
+                              -30));
+    _bullet.push_back(new enemybullet(Boss->getPosition().x,
+        Boss->getPosition().y + Boss->getSize().y / 2 + 15,
+                              -60));
+}
+
+void objectManager::batmanFire(batman *Batman)
+{
+    if (!Batman)
+        return;
+    _bullet.push_back(new enemybullet(Batman->getPosition().x,
+        Batman->getPosition().y + Batman->getSize().y / 2 + 15,
+                                0));
 }
 
 void objectManager::setTextType(sf::Text &text)
@@ -185,6 +225,22 @@ void objectManager::setTextType(sf::Text &text)
 
 }
 
+void objectManager::clearEnemy()
+{
+    for (std::list<enemy *>::iterator ite = _enemy.begin();
+         ite != _enemy.end(); ite++)
+        delete *ite;
+    _enemy.clear();
+}
+
+void objectManager::clearBullet()
+{
+    for (std::list<bullet *>::iterator ite = _bullet.begin();
+         ite != _bullet.end(); ite++)
+        delete *ite;
+    _bullet.clear();
+}
+
 void objectManager::collisionDetection()
 {
     for (std::list<bullet*>::iterator bulletIte = _bullet.begin();
@@ -193,20 +249,22 @@ void objectManager::collisionDetection()
         bullet *bulletP = *bulletIte;
         sf::FloatRect bulletBound = bulletP->getBounds();
 
-        for (std::list<enemy *>::iterator enemyIte = _enemy.begin();
-             enemyIte != _enemy.end(); enemyIte++) {
-            enemy *enemyP = *enemyIte;
+        if (dynamic_cast<myBullet *>(bulletP)) {
+            for (std::list<enemy *>::iterator enemyIte = _enemy.begin();
+                 enemyIte != _enemy.end(); enemyIte++) {
+                enemy *enemyP = *enemyIte;
 
-            if (bulletBound.intersects(enemyP->getBounds())) {
+                if (bulletBound.intersects(enemyP->getBounds())) {
                 bulletP->setHit();
                 enemyP->decreaseEnergy();
                 continue;
+                }
             }
-        }
-
-        if (bulletBound.intersects(_hero->getBounds())) {
-            _hero->dead();
-            bulletP->setHit();
+        } else {
+            if (bulletBound.intersects(_hero->getBounds())) {
+                _hero->dead();
+                bulletP->setHit();
+            }
         }
     }
 

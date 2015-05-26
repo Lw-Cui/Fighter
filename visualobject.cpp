@@ -14,13 +14,13 @@ void visualObject::load(int index)
 {
     std::string tmp = _prototype;
     tmp[0] = '0' + index;
-    _sprite.setTexture(game::getTexture(tmp));
+    _sprite.setTexture(game::_extract.getTexture(tmp));
     _sprite.setOrigin(getSize().x / 2, getSize().y / 2);
 }
 
 void visualObject::load()
 {
-    _sprite.setTexture(game::getTexture(_prototype));
+    _sprite.setTexture(game::_extract.getTexture(_prototype));
     _sprite.setOrigin(sf::Vector2f(getSize().x / 2, getSize().y / 2));
 }
 

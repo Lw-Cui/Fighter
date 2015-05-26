@@ -11,12 +11,14 @@ soundplayer::~soundplayer()
 
 }
 
-void soundplayer::playSound(const std::string &fileName, int volume)
+void soundplayer::playSound(const std::string &fileName,
+                            int volume, bool loop)
 {
     for (int i = 0; i < SOUND_SUM; i++)
         if (_sound[i].getStatus() != sf::Sound::Playing) {
             _sound[i] = _soundCache.getSound(fileName);
             _sound[i].setVolume(volume);
+            _sound[i].setLoop(loop);
             _sound[i].play();
             break;
         }

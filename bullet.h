@@ -29,10 +29,14 @@ public:
 class enemybullet : public bullet
 {
 public:
-    enemybullet(double x, double y);
+    enemybullet(double x, double y, double angle);
     ~enemybullet();
 
     void update();
+
+private:
+    double _velocity;
+    double _angle;
 };
 
 #endif // BULLET

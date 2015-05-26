@@ -59,6 +59,5 @@ int difficultControl::getEnemyType() const
 
 double difficultControl::getUnstability() const
 {
-    std::cout <<  1 + (double)(rand() % 10) / 10 << std::endl;
     return 1 + (double)(rand() % 10) / 10;
 }

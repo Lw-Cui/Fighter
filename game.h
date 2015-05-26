@@ -15,18 +15,20 @@ public:
     static bool gameLoop();
     const static int WIDTH = 480;
     const static int LENGTH = 700;
-    static void soundPlay(const std::string &fileName, int volume = 100);
-    static sf::Texture& getTexture(const std::string &fileName);
     static void setFont();
 
     static sf::Font _font;
     static difficultControl _controlPanel;
+    static soundplayer _audioPlay;
+    static extract _extract;
 
 private:
-    static extract _extract;
-    static soundplayer _audioPlay;
     static sf::RenderWindow _window;
     static objectManager _object;
+
+
+    static sf::Texture _image;
+    static sf::Sprite _gameOver;
 };
 
 #endif // GAME_H

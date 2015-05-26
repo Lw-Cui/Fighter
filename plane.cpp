@@ -85,7 +85,7 @@ void batman::update()
 
 hero::hero()
 {
-    _allLife = 3;
+    reStart();
     init();
     setCenter();
 }
@@ -109,7 +109,15 @@ void hero::update()
             && getPosition().x < game::WIDTH - getSize().x / 2)
         offsetX += VELOCITY;
 
-    _sprite.move(offsetX, 0);
+    double offsetY = 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
+            && getPosition().y > getSize().y / 2)
+        offsetY -= VELOCITY;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
+            && getPosition().y < game::LENGTH - getSize().y / 2)
+        offsetY += VELOCITY;
+
+    _sprite.move(offsetX, offsetY);
 
     if (_isdead && reborn())
         init();
@@ -129,13 +137,10 @@ bool hero::reborn()
    } else if (_rebornAnimation > - ANIMATION + 2
        && _rebornTime.getElapsedTime().asSeconds() > 0.2) {
 
-       if (_rebornAnimation == 1)
-           setCenter();
-
         if (_rebornAnimation % 2)
            load();
         else
-           _sprite.setTexture(game::getTexture("transparent"));
+           _sprite.setTexture(game::_extract.getTexture("transparent"));
 
        _rebornAnimation--;
        _rebornTime.restart();
@@ -149,7 +154,7 @@ bool hero::reborn()
 void hero::setCenter()
 {
     _sprite.setPosition(game::WIDTH / 2,
-                        game::LENGTH - getSize().y / 2);
+                        game::LENGTH - getSize().y / 2 - 150);
 }
 
 void hero::dead()
@@ -162,6 +167,12 @@ void hero::dead()
 int hero::getAllLife()
 {
     return _allLife;
+}
+
+void hero::reStart()
+{
+    _isdead = false;
+    _allLife = 3;
 }
 
 void enemy::deathAnimate()

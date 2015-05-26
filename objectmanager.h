@@ -16,18 +16,23 @@ public:
     void drawAll(sf::RenderWindow &window);
     void updateAll();
 
+    bool isContinue();
+    void reStart();
+
 private:
     void updateBullet();
     void updateEnemy();
     void updateText();
     void collisionDetection();
     void fire();
+    void bossFire(boss *Boss);
+    void batmanFire(batman *Batman);
     void setTextType(sf::Text &text);
-
+    void clearEnemy();
+    void clearBullet();
 
     sf::Texture _image;
     sf::Sprite _background;
-
     hero *_hero;
 
     std::list<enemy *> _enemy;

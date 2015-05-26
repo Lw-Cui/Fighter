@@ -7,7 +7,9 @@ game::game()
 void game::start()
 {
     _font.loadFromFile("resources/font/STHeiti Light.ttc");
-    _audioPlay.playSound("resources/sound/game_music.ogg", 80);
+    _audioPlay.playSound("resources/sound/game_music.ogg", 80, true);
+    _image.loadFromFile("resources/image/gameover.png");
+    _gameOver.setTexture(_image);
     _window.create(sf::VideoMode(WIDTH, LENGTH), "lw's Toy");
 
     while (gameLoop());
@@ -26,19 +28,16 @@ bool game::gameLoop()
      _object.updateAll();
      _object.drawAll(_window);
      _window.display();
+
+     if (!_object.isContinue()) {
+            _window.draw(_gameOver);
+            _window.display();
+            sf::sleep(sf::seconds(2));
+            _object.reStart();
+     }
+
      return true;
 }
-
-void game::soundPlay(const std::string &fileName, int volume)
-{
-    _audioPlay.playSound(fileName, volume);
-}
-
-sf::Texture &game::getTexture(const std::string &fileName)
-{
-    return _extract.getTexture(fileName);
-}
-
 
 
 extract game::_extract("resources/image/image.png",
@@ -48,3 +47,5 @@ soundplayer game::_audioPlay;
 sf::Font game::_font;
 objectManager game::_object;
 difficultControl game::_controlPanel;
+sf::Texture game::_image;
+sf::Sprite game::_gameOver;

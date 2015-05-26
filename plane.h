@@ -17,9 +17,11 @@ public:
     void dead();
     int getAllLife();
 
+    void reStart();
+
 private:
     const static int ANIMATION = 4;
-    const static double VELOCITY = 0.25;
+    const static double VELOCITY = 0.45;
 
     sf::Clock _rebornTime;
     int _rebornAnimation;
