@@ -14,11 +14,14 @@ public:
     double getBossVelocity() const;
     double getBatmanVelocity() const;
     double getBatVelocity() const;
+    int getEnemyType() const;
 
 private:
     double getUnstability() const;
 
     int _enemySum;
+    int _bossProportion;
+    int _batmanProportion;
 
     double _bossVelocity;
     double _batmanVelocity;

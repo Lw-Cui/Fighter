@@ -64,8 +64,8 @@ void objectManager::updateAll()
 
 void objectManager::updateEnemy()
 {
-    if (_score / 15000 > _level) {
-        _level = _score / 15000;
+    if (_score / 25000 > _level) {
+        _level = _score / 25000;
         game::_controlPanel.upLevel();
     }
 
@@ -78,10 +78,10 @@ void objectManager::updateEnemy()
             if( p->getPosition().y - p->getSize().y / 2 < game::LENGTH) {
                 if (dynamic_cast<boss *>(p)) {
                     game::soundPlay("resources/sound/enemy2_down.ogg", 75);
-                    _score += 10000;
+                    _score += 7000;
                 } else if (dynamic_cast<batman *>(p)) {
                     game::soundPlay("resources/sound/enemy3_down.ogg", 80);
-                    _score += 5000;
+                    _score += 3000;
                 } else {
                     game::soundPlay("resources/sound/enemy1_down.ogg", 90);
                     _score += 1000;
@@ -98,13 +98,20 @@ void objectManager::updateEnemy()
 
     for (int i = _enemy.size();
          i < game::_controlPanel.getEnemySum(); i++) {
-        int random = rand();
-        if (random % 2)
-            _enemy.push_back(new bat);
-        else if (random % 4)
-            _enemy.push_back(new batman);
-        else
+         int enemyTpye = game::_controlPanel.getEnemyType();
+         switch (enemyTpye) {
+         case 0:
             _enemy.push_back(new boss);
+            break;
+         case 1:
+            _enemy.push_back(new batman);
+            break;
+         case 2:
+            _enemy.push_back(new bat);
+            break;
+         default:
+             break;
+        }
     }
 }
 
@@ -140,20 +147,20 @@ void objectManager::updateBullet()
 
 void objectManager::fire()
 {
-    if (_myTime.getElapsedTime().asSeconds()> 0.2
+    if (_myFireTime.getElapsedTime().asSeconds()> 0.2
             && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         game::soundPlay("resources/sound/bullet.ogg");
         bullet *p = new myBullet(_hero->getPosition().x,
                         _hero->getPosition().y - _hero->getSize().y / 2 - 15);
         _bullet.push_back(p);
-        _myTime.restart();
+        _myFireTime.restart();
     }
 
 
-    if (!_enemy.empty() && _enemySum > 1
-            && _enemyTime.getElapsedTime().asSeconds() > 2) {
+    if (!_enemy.empty()
+            && _enemyFireTime.getElapsedTime().asSeconds() > 2) {
         std::list<enemy *>::iterator ite = _enemy.begin();
-        int index = rand() % (_enemySum - 1);
+        int index = rand() % (game::_controlPanel.getEnemySum() - 1);
         while (index--)
             ite++;
         visualObject *front = *ite;
@@ -163,7 +170,7 @@ void objectManager::fire()
                     front->getPosition().y +
                     front->getSize().y / 2 + 15);
             _bullet.push_back(p);
-            _enemyTime.restart();
+            _enemyFireTime.restart();
         }
     }
 

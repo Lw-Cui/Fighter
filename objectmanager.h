@@ -33,9 +33,7 @@ private:
     std::list<enemy *> _enemy;
     std::list<bullet *> _bullet;
 
-    int _enemySum;
-    sf::Clock _myTime, _enemyTime;
-
+    sf::Clock _myFireTime, _enemyFireTime;
     sf::Clock _backMoveTime;
     int _move;
 
