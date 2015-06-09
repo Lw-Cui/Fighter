@@ -12,9 +12,15 @@ public:
     virtual void update() = 0;
     bool isExisting();
     void setRandomPosition();
+    bool isGet();
+
+    void get();
+
+protected:
+    double _velocity;
 
 private:
-    bool isHit;
+    bool isGotten;
 };
 
 class bomb : public gift

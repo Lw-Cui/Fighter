@@ -18,10 +18,7 @@ public:
     int getEnemyType() const;
 
     int getGiftSum() const;
-    double getDoubleVelocity() const;
-
-    void getDoubleFire();
-    bool isDoubleFire();
+    double getDoubleBulletVelocity() const;
 
 private:
     double getUnstability() const;
@@ -36,8 +33,6 @@ private:
     double _batmanVelocity;
     double _batVelocity;
 
-    bool _isDoubleFire;
-    sf::Clock _duration;
 };
 
 #endif // DIFFICULTCONTROL_H

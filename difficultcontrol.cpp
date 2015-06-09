@@ -64,29 +64,15 @@ int difficultControl::getEnemyType() const
 
 int difficultControl::getGiftSum() const
 {
+    //to
     return _giftSum;
 }
 
-double difficultControl::getDoubleVelocity() const
+double difficultControl::getDoubleBulletVelocity() const
 {
-    return 0.13;
+    return 0.2;
 }
 
-void difficultControl::getDoubleFire()
-{
-    _isDoubleFire = true;
-    _duration.restart();
-}
-
-bool difficultControl::isDoubleFire()
-{
-    if (!_isDoubleFire &&
-            _duration.getElapsedTime().asSeconds() > 20) {
-        _isDoubleFire = false;
-    }
-
-    return _isDoubleFire;
-}
 
 double difficultControl::getUnstability() const
 {

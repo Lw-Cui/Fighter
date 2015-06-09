@@ -2,6 +2,21 @@
 #include "plane.h"
 #include "game.h"
 
+void hero::getDoubleFire()
+{
+    _isDoubleFire = true;
+    _duration.restart();
+}
+
+bool hero::isDoubleFire()
+{
+    if (_isDoubleFire &&
+            _duration.getElapsedTime().asSeconds() > 10) {
+        _isDoubleFire = false;
+    }
+
+    return _isDoubleFire;
+}
 
 void enemy::dead()
 {
@@ -31,6 +46,7 @@ boss::boss()
     _energy = ENERGY;
     _deathAnimation = ANIMATION;
     _prototype = "*-boss";
+    _velocity = game::_controlPanel.getBossVelocity();
     load();
     setRandomPosition();
 }
@@ -38,7 +54,7 @@ boss::boss()
 
 void boss::update()
 {
-    _sprite.move(0, game::_controlPanel.getBossVelocity());
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -49,6 +65,7 @@ bat::bat()
     _prototype = "*-bat";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
+    _velocity = game::_controlPanel.getBatVelocity();
     load();
     setRandomPosition();
 }
@@ -56,7 +73,7 @@ bat::bat()
 
 void bat::update()
 {
-    _sprite.move(0, game::_controlPanel.getBatVelocity());
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -68,13 +85,14 @@ batman::batman()
     _prototype = "*-batman";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
+    _velocity = game::_controlPanel.getBatmanVelocity();
     load();
     setRandomPosition();
 }
 
 void batman::update()
 {
-    _sprite.move(0, game::_controlPanel.getBatmanVelocity());
+    _sprite.move(0, _velocity);
     if (_energy <= 0)
         deathAnimate();
 }
@@ -170,6 +188,7 @@ void hero::reStart()
 {
     _isdead = false;
     _allLife = 3;
+    _isDoubleFire = false;
 }
 
 void enemy::deathAnimate()

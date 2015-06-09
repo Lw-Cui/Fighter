@@ -86,9 +86,6 @@ void objectManager::reStart()
 
 void objectManager::updateEnemy()
 {
-        std::cout << _level << std::endl;
-        std::cout << _score << std::endl;
-
     if (log(_score / 30000) > _level) {
         _level = log(_score / 30000) + 1;
         game::_controlPanel.upLevel();
@@ -146,6 +143,8 @@ void objectManager::updateGift()
          ite != _gift.end();) {
         gift *p = *ite;
         if (!p->isExisting()) {
+            if (p->isGet())
+                game::_audioPlay.playSound("resources/sound/get_double_laser.ogg");
             delete p;
             _gift.erase(ite++);
         } else {
@@ -214,12 +213,12 @@ void objectManager::fire()
 
 void objectManager::heroFire()
 {
-    if (game::_controlPanel.isDoubleFire()) {
-        bullet *p1 = new myBullet(_hero->getPosition().x - 5,
+    if (_hero->isDoubleFire()) {
+        bullet *p1 = new myBullet(_hero->getPosition().x - 8,
                 _hero->getPosition().y - _hero->getSize().y / 2 - 15);
         _bullet.push_back(p1);
 
-        bullet *p2 = new myBullet(_hero->getPosition().x + 5,
+        bullet *p2 = new myBullet(_hero->getPosition().x + 8,
                 _hero->getPosition().y - _hero->getSize().y / 2 - 15);
         _bullet.push_back(p2);
 
@@ -322,6 +321,16 @@ void objectManager::collisionDetection()
         if (_hero->getBounds().intersects(enemyP->getBounds())) {
             _hero->dead();
             enemyP->dead();
+        }
+    }
+
+    for (std::list<gift *>::iterator giftIte = _gift.begin();
+         giftIte != _gift.end(); giftIte++) {
+
+        gift *giftP = *giftIte;
+        if (giftP->getBounds().intersects(_hero->getBounds())) {
+            giftP->get();
+            _hero->getDoubleFire();
         }
     }
 }

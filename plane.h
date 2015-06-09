@@ -17,9 +17,15 @@ public:
 
     void reStart();
 
+    void getDoubleFire();
+    bool isDoubleFire();
+
 private:
     const static int ANIMATION = 4;
     const static double VELOCITY = 0.45;
+
+    bool _isDoubleFire;
+    sf::Clock _duration;
 
     sf::Clock _rebornTime;
     int _rebornAnimation;
@@ -40,6 +46,7 @@ protected:
     void setRandomPosition();
     int _deathAnimation;
     int _energy;
+    double _velocity;
 
 private:
     sf::Clock _deathTime;
