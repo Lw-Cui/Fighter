@@ -6,6 +6,7 @@
 #include "objectmanager.h"
 #include "plane.h"
 #include "bullet.h"
+#include "gift.h"
 
 class objectManager
 {
@@ -22,9 +23,12 @@ public:
 private:
     void updateBullet();
     void updateEnemy();
+    void updateGift();
     void updateText();
     void collisionDetection();
     void fire();
+
+    void heroFire();
     void bossFire(boss *Boss);
     void batmanFire(batman *Batman);
     void setTextType(sf::Text &text);
@@ -37,6 +41,7 @@ private:
 
     std::list<enemy *> _enemy;
     std::list<bullet *> _bullet;
+    std::list<gift *> _gift;
 
     sf::Clock _myFireTime, _enemyFireTime;
     sf::Clock _backMoveTime;

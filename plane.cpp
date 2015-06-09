@@ -31,7 +31,6 @@ boss::boss()
     _energy = ENERGY;
     _deathAnimation = ANIMATION;
     _prototype = "*-boss";
-    _velocity = game::_controlPanel.getBossVelocity();
     load();
     setRandomPosition();
 }
@@ -39,7 +38,7 @@ boss::boss()
 
 void boss::update()
 {
-    _sprite.move(0, _velocity);
+    _sprite.move(0, game::_controlPanel.getBossVelocity());
     if (_energy <= 0)
         deathAnimate();
 }
@@ -50,7 +49,6 @@ bat::bat()
     _prototype = "*-bat";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
-    _velocity = game::_controlPanel.getBatVelocity();
     load();
     setRandomPosition();
 }
@@ -58,7 +56,7 @@ bat::bat()
 
 void bat::update()
 {
-    _sprite.move(0, _velocity);
+    _sprite.move(0, game::_controlPanel.getBatVelocity());
     if (_energy <= 0)
         deathAnimate();
 }
@@ -70,14 +68,13 @@ batman::batman()
     _prototype = "*-batman";
     _deathAnimation = ANIMATION;
     _energy = ENERGY;
-    _velocity = game::_controlPanel.getBatmanVelocity();
     load();
     setRandomPosition();
 }
 
 void batman::update()
 {
-    _sprite.move(0, _velocity);
+    _sprite.move(0, game::_controlPanel.getBatmanVelocity());
     if (_energy <= 0)
         deathAnimate();
 }

@@ -3,8 +3,6 @@
 
 #include "visualobject.h"
 
-
-
 class hero : public visualObject
 {
 public:
@@ -29,8 +27,6 @@ private:
     int _allLife;
 };
 
-
-
 class enemy : public visualObject
 {
 public:
@@ -44,7 +40,6 @@ protected:
     void setRandomPosition();
     int _deathAnimation;
     int _energy;
-    double _velocity;
 
 private:
     sf::Clock _deathTime;

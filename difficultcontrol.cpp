@@ -4,6 +4,8 @@
 
 difficultControl::difficultControl()
 {
+    _giftSum = 1;
+
     _enemySum = 3;
     _bossProportion = 5;
     _batmanProportion = 15;
@@ -20,7 +22,10 @@ difficultControl::~difficultControl()
 
 void difficultControl::upLevel()
 {
+    _giftSum++;
+
     _enemySum += 2;
+    std::cout << "enemy: " << _enemySum << std::endl;
 
     _bossProportion += 2;
     _batmanProportion += 10;
@@ -55,6 +60,32 @@ int difficultControl::getEnemyType() const
         return 1;
     else
         return 2;
+}
+
+int difficultControl::getGiftSum() const
+{
+    return _giftSum;
+}
+
+double difficultControl::getDoubleVelocity() const
+{
+    return 0.13;
+}
+
+void difficultControl::getDoubleFire()
+{
+    _isDoubleFire = true;
+    _duration.restart();
+}
+
+bool difficultControl::isDoubleFire()
+{
+    if (!_isDoubleFire &&
+            _duration.getElapsedTime().asSeconds() > 20) {
+        _isDoubleFire = false;
+    }
+
+    return _isDoubleFire;
 }
 
 double difficultControl::getUnstability() const

@@ -1,10 +1,12 @@
 #include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include <cassert>
 #include <SFML/System/Clock.hpp>
 #include "objectmanager.h"
 #include "bullet.h"
 #include "game.h"
-
+#include "gift.h"
 
 objectManager::objectManager()
 {
@@ -43,6 +45,10 @@ void objectManager::drawAll(sf::RenderWindow &window)
          ite != _bullet.end(); ite++)
         (*ite)->draw(window);
 
+    for (std::list<gift *>::iterator ite = _gift.begin();
+         ite != _gift.end(); ite++)
+        (*ite)->draw(window);
+
     window.draw(_scoreBoard);
     window.draw(_lifeBoard);
 }
@@ -59,6 +65,7 @@ void objectManager::updateAll()
     _hero->update();
     updateBullet();
     updateEnemy();
+    updateGift();
     fire();
     collisionDetection();
     updateText();
@@ -79,8 +86,11 @@ void objectManager::reStart()
 
 void objectManager::updateEnemy()
 {
-    if (_score / 25000 > _level) {
-        _level = _score / 25000;
+        std::cout << _level << std::endl;
+        std::cout << _score << std::endl;
+
+    if (log(_score / 30000) > _level) {
+        _level = log(_score / 30000) + 1;
         game::_controlPanel.upLevel();
     }
 
@@ -130,6 +140,26 @@ void objectManager::updateEnemy()
     }
 }
 
+void objectManager::updateGift()
+{
+    for (std::list<gift *>::iterator ite = _gift.begin();
+         ite != _gift.end();) {
+        gift *p = *ite;
+        if (!p->isExisting()) {
+            delete p;
+            _gift.erase(ite++);
+        } else {
+            p->update();
+            ite++;
+        }
+    }
+
+    for (int i = _gift.size();
+         i < game::_controlPanel.getGiftSum(); i++) {
+        _gift.push_back(new doubleFire);
+    }
+}
+
 void objectManager::updateText()
 {
     char score[100];
@@ -165,9 +195,7 @@ void objectManager::fire()
     if (_myFireTime.getElapsedTime().asSeconds()> 0.2
             && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         game::_audioPlay.playSound("resources/sound/bullet.ogg");
-        bullet *p = new myBullet(_hero->getPosition().x,
-                        _hero->getPosition().y - _hero->getSize().y / 2 - 15);
-        _bullet.push_back(p);
+        heroFire();
         _myFireTime.restart();
     }
 
@@ -181,7 +209,26 @@ void objectManager::fire()
         bossFire(dynamic_cast<boss *>(enemyF));
         batmanFire(dynamic_cast<batman *>(enemyF));
         _enemyFireTime.restart();
-        }
+    }
+}
+
+void objectManager::heroFire()
+{
+    if (game::_controlPanel.isDoubleFire()) {
+        bullet *p1 = new myBullet(_hero->getPosition().x - 5,
+                _hero->getPosition().y - _hero->getSize().y / 2 - 15);
+        _bullet.push_back(p1);
+
+        bullet *p2 = new myBullet(_hero->getPosition().x + 5,
+                _hero->getPosition().y - _hero->getSize().y / 2 - 15);
+        _bullet.push_back(p2);
+
+    } else {
+        bullet *p = new myBullet(_hero->getPosition().x,
+                _hero->getPosition().y - _hero->getSize().y / 2 - 15);
+        _bullet.push_back(p);
+
+    }
 }
 
 

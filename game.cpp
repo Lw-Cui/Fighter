@@ -31,6 +31,7 @@ bool game::gameLoop()
 
      if (!_object.isContinue()) {
             _window.draw(_gameOver);
+            _audioPlay.playSound("resources/sound/game_over.ogg", 75);
             _window.display();
             sf::sleep(sf::seconds(2));
             _object.reStart();

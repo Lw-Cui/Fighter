@@ -40,8 +40,6 @@ void myBullet::update()
     _sprite.move(0, -1);
 }
 
-
-
 bullet::bullet() : isHit(false)
 {
 

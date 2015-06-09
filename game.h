@@ -26,7 +26,6 @@ private:
     static sf::RenderWindow _window;
     static objectManager _object;
 
-
     static sf::Texture _image;
     static sf::Sprite _gameOver;
 };

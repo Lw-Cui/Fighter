@@ -12,7 +12,8 @@ SOURCES += \
     extract.cpp \
     objectmanager.cpp \
     plane.cpp \
-    difficultcontrol.cpp
+    difficultcontrol.cpp \
+    gift.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -36,4 +37,5 @@ HEADERS += \
     soundplayer.h \
     extract.h \
     plane.h \
-    difficultcontrol.h
+    difficultcontrol.h \
+    gift.h

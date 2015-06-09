@@ -26,7 +26,7 @@ public:
                    int volume = 100, bool loop = false);
 
 private:
-    const static int SOUND_SUM = 10;
+    const static int SOUND_SUM = 20;
     sf::Sound _sound[SOUND_SUM];
     soundCache _soundCache;
 };
