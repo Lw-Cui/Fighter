@@ -11,7 +11,7 @@ void hero::getDoubleFire()
 bool hero::isDoubleFire()
 {
     if (_isDoubleFire &&
-            _duration.getElapsedTime().asSeconds() > 10) {
+            _duration.getElapsedTime().asSeconds() > 13) {
         _isDoubleFire = false;
     }
 
